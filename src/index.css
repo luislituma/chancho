@@ -27,8 +27,8 @@ body {
   font-family: 'Manrope', sans-serif;
   background-color: var(--bg-color);
   background-image: 
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.15) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(255, 122, 89, 0.16) 0px, transparent 48%),
+    radial-gradient(at 100% 100%, rgba(99, 230, 190, 0.12) 0px, transparent 48%);
   background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;

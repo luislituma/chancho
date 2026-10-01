@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import { data as initialData, MONTHS, QUOTA_AMOUNT, type Friend } from './data';
 import { supabase } from './supabase';
+import heroImage from './assets/hero.png';
 
 const MOBILE_MONTH_NAMES: Record<string, string> = {
   Agosto: 'AGO',
@@ -10,6 +11,13 @@ const MOBILE_MONTH_NAMES: Record<string, string> = {
   Noviembre: 'NOV',
   Diciembre: 'DIC',
 };
+
+const getInitials = (name: string) => name
+  .split(' ')
+  .map(part => part[0])
+  .join('')
+  .slice(0, 2)
+  .toUpperCase();
 
 function App() {
   const [friends, setFriends] = useState<Friend[]>(initialData);
@@ -128,6 +136,14 @@ function App() {
           </button>
         </div>
         <p className="subtitle">CHANCHIZA · Seguimiento de cuotas</p>
+        <div className="group-banner">
+          <img src={heroImage} alt="" className="banner-art" />
+          <div>
+            <p className="banner-kicker">Una meta, un solo grupo</p>
+            <strong>La chanchiza se construye entre todos</strong>
+          </div>
+          <span className="banner-mark" aria-hidden="true">✦</span>
+        </div>
       </header>
 
       <main>
@@ -159,7 +175,12 @@ function App() {
 
                   return (
                     <tr key={friend.id}>
-                      <td>{friend.name}</td>
+                      <td>
+                        <span className="friend-identity">
+                          <span className="avatar" aria-hidden="true">{getInitials(friend.name)}</span>
+                          {friend.name}
+                        </span>
+                      </td>
                       {friend.payments.map((payment, index) => (
                         <td key={`${friend.id}-${index}`}>
                           <button
@@ -192,7 +213,10 @@ function App() {
                 <article className="friend-card" key={friend.id}>
                   <div className="friend-card-header">
                     <div>
-                      <h3>{friend.name}</h3>
+                      <h3>
+                        <span className="avatar" aria-hidden="true">{getInitials(friend.name)}</span>
+                        {friend.name}
+                      </h3>
                       <p>{friendTotal} de {friend.payments.length * QUOTA_AMOUNT} recaudados</p>
                     </div>
                     <strong>${friendTotal}</strong>
