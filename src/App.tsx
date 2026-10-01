@@ -18,9 +18,19 @@ const getInitials = (name: string) => name
   .slice(0, 2)
   .toUpperCase();
 
+const CANONICAL_NAMES: Record<string, string> = {
+  '0': 'Alicia Quezada',
+  '1': 'Manuel Lituma',
+  '2': 'Teresa Lituma',
+  '3': 'Galo Jimenez',
+  '4': 'Yuliana Vicente',
+  '5': 'Paola Vicente',
+  '6': 'Luis Lituma',
+};
+
 const normalizeFriends = (friends: Friend[]): Friend[] => friends.map(friend => ({
   ...friend,
-  name: friend.name.replace(/\bLituan(?:a|ia)\b/gi, 'Lituma'),
+  name: CANONICAL_NAMES[friend.id] ?? friend.name.replace(/\bLituan(?:a|ia)\b/gi, 'Lituma'),
 }));
 
 function App() {
