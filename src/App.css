@@ -57,13 +57,17 @@
   position: relative;
 }
 
-.banner-art {
-  align-self: flex-end;
-  height: 108px;
-  margin: -1rem 0 -1.2rem -0.7rem;
-  object-fit: contain;
-  opacity: 0.72;
-  width: 86px;
+.banner-party {
+  align-items: center;
+  background: rgba(255, 122, 89, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 2rem;
+  height: 3.6rem;
+  justify-content: center;
+  width: 3.6rem;
 }
 
 .banner-kicker {
@@ -105,6 +109,118 @@
   min-height: 2.55rem;
   padding: 0.55rem 0.9rem;
   transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.payment-float {
+  bottom: 1.25rem;
+  position: fixed;
+  right: clamp(1rem, 3vw, 2rem);
+  z-index: 20;
+}
+
+.password-overlay {
+  align-items: center;
+  background: rgba(5, 12, 19, 0.74);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 1rem;
+  position: fixed;
+  z-index: 40;
+}
+
+.password-modal {
+  background: rgba(25, 39, 51, 0.98);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+  max-width: 390px;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.password-modal-icon {
+  align-items: center;
+  background: rgba(255, 122, 89, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  display: flex;
+  font-size: 1.35rem;
+  height: 2.8rem;
+  justify-content: center;
+  margin-bottom: 0.9rem;
+  width: 2.8rem;
+}
+
+.password-modal h2 {
+  font-size: 1.35rem;
+  margin-top: 0.35rem;
+}
+
+.password-help {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin: 0.45rem 0 1.1rem;
+}
+
+.password-modal label {
+  color: var(--text-muted);
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.password-modal input {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--card-border);
+  border-radius: 9px;
+  color: var(--text-main);
+  font: inherit;
+  min-height: 2.8rem;
+  outline: none;
+  padding: 0.65rem 0.75rem;
+  width: 100%;
+}
+
+.password-modal input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99, 230, 190, 0.12);
+}
+
+.password-error {
+  color: #ff9c82;
+  font-size: 0.75rem;
+  margin-top: 0.45rem;
+}
+
+.password-actions {
+  display: flex;
+  gap: 0.65rem;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+.password-actions button {
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  min-height: 2.6rem;
+  padding: 0.6rem 0.9rem;
+}
+
+.modal-cancel {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+}
+
+.modal-submit {
+  background: var(--primary);
+  color: white;
 }
 
 .admin-button:hover {
@@ -254,14 +370,6 @@
   transition: filter 0.2s ease, transform 0.2s ease;
 }
 
-.status-dot {
-  background: currentColor;
-  border-radius: 50%;
-  display: inline-block;
-  height: 0.42rem;
-  width: 0.42rem;
-}
-
 .status-paid {
   background-color: rgba(52, 211, 153, 0.14);
   color: var(--success);
@@ -361,15 +469,18 @@
   }
 
   .admin-button {
-    font-size: 0;
-    gap: 0;
-    min-height: 2.8rem;
-    padding: 0.7rem;
-    width: 2.8rem;
+    font-size: 0.74rem;
+    min-height: 2.7rem;
+    padding: 0.65rem 0.9rem;
   }
 
   .admin-button span:first-child {
-    font-size: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .payment-float {
+    bottom: 1rem;
+    right: 1rem;
   }
 
   .subtitle {
@@ -382,10 +493,10 @@
     padding: 0.65rem 0.75rem;
   }
 
-  .banner-art {
-    height: 88px;
-    margin-left: -0.8rem;
-    width: 70px;
+  .banner-party {
+    font-size: 1.55rem;
+    height: 2.8rem;
+    width: 2.8rem;
   }
 
   .banner-kicker {

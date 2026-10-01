@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import './App.css';
 import { data as initialData, MONTHS, QUOTA_AMOUNT, type Friend } from './data';
 import { supabase } from './supabase';
-import heroImage from './assets/hero.png';
 
 const MOBILE_MONTH_NAMES: Record<string, string> = {
   Agosto: 'AGO',
@@ -19,10 +18,18 @@ const getInitials = (name: string) => name
   .slice(0, 2)
   .toUpperCase();
 
+const normalizeFriends = (friends: Friend[]): Friend[] => friends.map(friend => ({
+  ...friend,
+  name: friend.name.replace(/\bLituana\b/gi, 'Lituma'),
+}));
+
 function App() {
   const [friends, setFriends] = useState<Friend[]>(initialData);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   // Fetch initial data from Supabase
   useEffect(() => {
@@ -41,7 +48,7 @@ function App() {
             try { parsed = JSON.parse(parsed); } catch (e) {}
           }
           if (Array.isArray(parsed)) {
-            setFriends(parsed as Friend[]);
+            setFriends(normalizeFriends(parsed as Friend[]));
           }
         }
       } catch (err) {
@@ -89,13 +96,19 @@ function App() {
       setIsAdmin(false);
       return;
     }
-    const password = prompt("Ingresa la contraseña de administrador:");
-    if (password === "chancho26") {
+    setPassword('');
+    setPasswordError('');
+    setIsPasswordModalOpen(true);
+  };
+
+  const handlePasswordSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (password === 'chancho26') {
       setIsAdmin(true);
-      alert("Modo administrador activado. Ahora puedes hacer clic en las cuotas para cambiarlas.");
-    } else if (password !== null) {
-      alert("Contraseña incorrecta");
+      setIsPasswordModalOpen(false);
+      return;
     }
+    setPasswordError('Contraseña incorrecta');
   };
 
   const togglePayment = (friendId: string, monthIndex: number) => {
@@ -128,16 +141,16 @@ function App() {
           </div>
           <button 
             onClick={handleAdminLogin}
-            className={`admin-button ${isAdmin ? 'admin-active' : ''}`}
-            title={isAdmin ? "Cerrar sesión" : "Iniciar como admin"}
+            className={`admin-button payment-float ${isAdmin ? 'admin-active' : ''}`}
+            title={isAdmin ? "Cerrar modo de pago" : "Activar modo de pago"}
           >
-            <span aria-hidden="true">{isAdmin ? "🔒" : "🔓"}</span>
-            <span>{isAdmin ? 'Admin activo' : 'Acceso admin'}</span>
+            <span aria-hidden="true">💳</span>
+            <span>{isAdmin ? 'Cerrar' : 'Pagar'}</span>
           </button>
         </div>
         <p className="subtitle">CHANCHIZA · Seguimiento de cuotas</p>
         <div className="group-banner">
-          <img src={heroImage} alt="" className="banner-art" />
+          <span className="banner-party" aria-hidden="true">🎉</span>
           <div>
             <p className="banner-kicker">Una meta, un solo grupo</p>
             <strong>La chanchiza se construye entre todos</strong>
@@ -188,7 +201,6 @@ function App() {
                             disabled={!isAdmin}
                             className={`status-badge payment-button ${payment.paid ? 'status-paid' : 'status-unpaid'}`}
                           >
-                            <span className="status-dot" aria-hidden="true" />
                             {payment.paid ? `$${payment.amount} Pagado` : 'Pendiente'}
                           </button>
                         </td>
@@ -262,6 +274,35 @@ function App() {
           </div>
         </div>
       </main>
+
+      {isPasswordModalOpen && (
+        <div className="password-overlay" onClick={() => setIsPasswordModalOpen(false)}>
+          <form className="password-modal" onClick={event => event.stopPropagation()} onSubmit={handlePasswordSubmit}>
+            <div className="password-modal-icon" aria-hidden="true">💳</div>
+            <p className="section-kicker">Modo de pago</p>
+            <h2>Ingresa tu contraseña</h2>
+            <p className="password-help">Activa el modo de pago para registrar cuotas.</p>
+            <label htmlFor="admin-password">Contraseña</label>
+            <input
+              id="admin-password"
+              type="password"
+              value={password}
+              onChange={event => setPassword(event.target.value)}
+              autoFocus
+              autoComplete="current-password"
+            />
+            {passwordError && <p className="password-error" role="alert">{passwordError}</p>}
+            <div className="password-actions">
+              <button type="button" className="modal-cancel" onClick={() => setIsPasswordModalOpen(false)}>
+                Cancelar
+              </button>
+              <button type="submit" className="modal-submit">
+                Ingresar
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
