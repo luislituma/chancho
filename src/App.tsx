@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { data as initialData, MONTHS, QUOTA_AMOUNT, type Friend } from './data';
 import { supabase } from './supabase';
