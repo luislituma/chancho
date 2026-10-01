@@ -1,14 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --primary: #6366f1;
-  --primary-hover: #4f46e5;
-  --success: #10b981;
+  --primary: #ff7a59;
+  --primary-hover: #ff6240;
+  --accent: #63e6be;
+  --success: #34d399;
   --danger: #ef4444;
   --warning: #f59e0b;
   
-  --bg-color: #0f172a;
-  --card-bg: rgba(30, 41, 59, 0.7);
+  --bg-color: #101b26;
+  --card-bg: rgba(25, 39, 51, 0.82);
   --card-border: rgba(255, 255, 255, 0.1);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
@@ -23,7 +24,7 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Manrope', sans-serif;
   background-color: var(--bg-color);
   background-image: 
     radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),

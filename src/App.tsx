@@ -66,6 +66,8 @@ function App() {
     }, 0);
   }, 0);
 
+  const progress = totalExpected > 0 ? Math.round((totalCollected / totalExpected) * 100) : 0;
+
   const handleAdminLogin = () => {
     if (isAdmin) {
       setIsAdmin(false);
@@ -103,33 +105,33 @@ function App() {
   return (
     <div className="app-container">
       <header className="header">
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-          <h1 className="title" style={{ marginBottom: 0 }}>LOS CHEVERES</h1>
+        <div className="brand-row">
+          <div>
+            <p className="eyebrow">Fondo común · 2026</p>
+            <h1 className="title">LOS CHEVERES</h1>
+          </div>
           <button 
             onClick={handleAdminLogin}
-            style={{ 
-              background: isAdmin ? 'var(--danger)' : 'var(--primary)', 
-              color: 'white', 
-              border: 'none', 
-              borderRadius: '50%',
-              width: '32px',
-              height: '32px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-            }}
+            className={`admin-button ${isAdmin ? 'admin-active' : ''}`}
             title={isAdmin ? "Cerrar sesión" : "Iniciar como admin"}
           >
-            {isAdmin ? "🔒" : "🔓"}
+            <span aria-hidden="true">{isAdmin ? "🔒" : "🔓"}</span>
+            <span>{isAdmin ? 'Admin activo' : 'Acceso admin'}</span>
           </button>
         </div>
-        <p className="subtitle">CHANCHIZA 2026</p>
+        <p className="subtitle">CHANCHIZA · Seguimiento de cuotas</p>
       </header>
 
       <main>
         <div className="dashboard-card">
+          <div className="dashboard-intro">
+            <div>
+              <p className="section-kicker">Estado de la colecta</p>
+              <h2>Cuotas del grupo</h2>
+            </div>
+            <span className="member-count">{friends.length} amigos</span>
+          </div>
+
           <div className="table-responsive">
             <table className="quotas-table">
               <thead>
@@ -152,13 +154,14 @@ function App() {
                       <td>{friend.name}</td>
                       {friend.payments.map((payment, index) => (
                         <td key={`${friend.id}-${index}`}>
-                          <span
+                          <button
                             onClick={() => togglePayment(friend.id, index)}
-                            style={{ cursor: isAdmin ? 'pointer' : 'default' }}
-                            className={`status-badge ${payment.paid ? 'status-paid' : 'status-unpaid'}`}
+                            disabled={!isAdmin}
+                            className={`status-badge payment-button ${payment.paid ? 'status-paid' : 'status-unpaid'}`}
                           >
+                            <span className="status-dot" aria-hidden="true" />
                             {payment.paid ? `$${payment.amount} Pagado` : 'Pendiente'}
-                          </span>
+                          </button>
                         </td>
                       ))}
                       <td style={{ fontWeight: 600, color: 'var(--text-main)' }}>
@@ -169,6 +172,42 @@ function App() {
                 })}
               </tbody>
             </table>
+          </div>
+
+          <div className="mobile-friends" aria-label="Cuotas por amigo">
+            {friends.map(friend => {
+              const friendTotal = friend.payments.reduce(
+                (sum, payment) => sum + (payment.paid ? payment.amount : 0), 0
+              );
+
+              return (
+                <article className="friend-card" key={friend.id}>
+                  <div className="friend-card-header">
+                    <div>
+                      <h3>{friend.name}</h3>
+                      <p>{friendTotal} de {friend.payments.length * QUOTA_AMOUNT} recaudados</p>
+                    </div>
+                    <strong>${friendTotal}</strong>
+                  </div>
+                  <div className="mobile-payments">
+                    {friend.payments.map((payment, index) => (
+                      <div className="mobile-payment" key={`${friend.id}-mobile-${index}`}>
+                        <span className="mobile-month">{payment.month.slice(0, 3)}</span>
+                        <button
+                          onClick={() => togglePayment(friend.id, index)}
+                          disabled={!isAdmin}
+                          className={`mobile-status ${payment.paid ? 'status-paid' : 'status-unpaid'}`}
+                          aria-label={`${payment.month}: ${payment.paid ? 'pagado' : 'pendiente'}`}
+                        >
+                          <span className="status-dot" aria-hidden="true" />
+                          {payment.paid ? 'OK' : '--'}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              );
+            })}
           </div>
 
           <div className="total-summary">
@@ -183,9 +222,12 @@ function App() {
             <div className="summary-item">
               <span className="summary-label">Progreso</span>
               <span className="summary-value">
-                {Math.round((totalCollected / totalExpected) * 100)}%
+                {progress}%
               </span>
             </div>
+          </div>
+          <div className="progress-track" aria-label={`Progreso de la colecta: ${progress}%`}>
+            <span style={{ width: `${Math.min(progress, 100)}%` }} />
           </div>
         </div>
       </main>
