@@ -382,6 +382,12 @@
   border: 1px solid rgba(255, 122, 89, 0.24);
 }
 
+.status-symbol {
+  font-size: 1.15rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
 .mobile-friends {
   display: none;
 }
@@ -588,11 +594,14 @@
 
   .mobile-status {
     border-radius: 8px;
-    font-size: 0.68rem;
     font-weight: 800;
     min-height: 2rem;
     min-width: 100%;
     padding: 0.35rem 0.2rem;
+  }
+
+  .mobile-status .status-symbol {
+    font-size: 1.3rem;
   }
 
   .mobile-status.status-paid {

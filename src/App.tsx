@@ -20,11 +20,11 @@ const getInitials = (name: string) => name
 
 const normalizeFriends = (friends: Friend[]): Friend[] => friends.map(friend => ({
   ...friend,
-  name: friend.name.replace(/\bLituana\b/gi, 'Lituma'),
+  name: friend.name.replace(/\bLituan(?:a|ia)\b/gi, 'Lituma'),
 }));
 
 function App() {
-  const [friends, setFriends] = useState<Friend[]>(initialData);
+  const [friends, setFriends] = useState<Friend[]>(() => normalizeFriends(initialData));
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -242,8 +242,9 @@ function App() {
                           disabled={!isAdmin}
                           className={`mobile-status ${payment.paid ? 'status-paid' : 'status-unpaid'}`}
                           aria-label={`${payment.month}: ${payment.paid ? 'pagado' : 'pendiente'}`}
+                          title={`${payment.month}: ${payment.paid ? 'pagado' : 'pendiente'}`}
                         >
-                          {payment.paid ? 'OK' : 'X'}
+                          <span className="status-symbol" aria-hidden="true">{payment.paid ? '✓' : '×'}</span>
                         </button>
                       </div>
                     ))}
