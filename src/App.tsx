@@ -142,7 +142,7 @@ function App() {
   }
 
   return (
-    <div className="app-container">
+    <div className="app-container notranslate" translate="no">
       <header className="header">
         <div className="brand-row">
           <div>
