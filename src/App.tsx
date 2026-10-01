@@ -3,6 +3,14 @@ import './App.css';
 import { data as initialData, MONTHS, QUOTA_AMOUNT, type Friend } from './data';
 import { supabase } from './supabase';
 
+const MOBILE_MONTH_NAMES: Record<string, string> = {
+  Agosto: 'AGO',
+  Septiembre: 'SEP',
+  Octubre: 'OCT',
+  Noviembre: 'NOV',
+  Diciembre: 'DIC',
+};
+
 function App() {
   const [friends, setFriends] = useState<Friend[]>(initialData);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -192,15 +200,14 @@ function App() {
                   <div className="mobile-payments">
                     {friend.payments.map((payment, index) => (
                       <div className="mobile-payment" key={`${friend.id}-mobile-${index}`}>
-                        <span className="mobile-month">{payment.month.slice(0, 3)}</span>
+                        <span className="mobile-month">{MOBILE_MONTH_NAMES[payment.month] ?? payment.month.slice(0, 3).toUpperCase()}</span>
                         <button
                           onClick={() => togglePayment(friend.id, index)}
                           disabled={!isAdmin}
                           className={`mobile-status ${payment.paid ? 'status-paid' : 'status-unpaid'}`}
                           aria-label={`${payment.month}: ${payment.paid ? 'pagado' : 'pendiente'}`}
                         >
-                          <span className="status-dot" aria-hidden="true" />
-                          {payment.paid ? 'OK' : '--'}
+                          {payment.paid ? 'OK' : 'X'}
                         </button>
                       </div>
                     ))}
