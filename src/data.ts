@@ -28,6 +28,7 @@ export const data: Friend[] = [
   { name: "Yuliana Vicente" },
   { name: "Paola Vicente" }, 
   { name: "Luis Lituma" },
+  { name: "Julissa Calva" },
 ].map((friend, index) => ({
   id: index.toString(),
   name: friend.name,

@@ -26,12 +26,42 @@ const CANONICAL_NAMES: Record<string, string> = {
   '4': 'Yuliana Vicente',
   '5': 'Paola Vicente',
   '6': 'Luis Lituma',
+  '7': 'Julissa Calva',
+};
+
+const AVATAR_FILES: Record<string, string> = {
+  '0': '/avatars/alicia-quezada.jpg',
+  '1': '/avatars/manuel-lituma.jpg',
+  '2': '/avatars/teresa-lituma.jpg',
+  '3': '/avatars/galo-jimenez.jpg',
+  '4': '/avatars/yuliana-vicente.jpg',
+  '5': '/avatars/paola-vicente.jpg',
+  '6': '/avatars/luis-lituma.jpg',
+  '7': '/avatars/julissa-calva.jpg',
 };
 
 const normalizeFriends = (friends: Friend[]): Friend[] => friends.map(friend => ({
   ...friend,
   name: CANONICAL_NAMES[friend.id] ?? friend.name.replace(/\bLituan(?:a|ia)\b/gi, 'Lituma'),
 }));
+
+function Avatar({ friend }: { friend: Friend }) {
+  const [hasImageError, setHasImageError] = useState(false);
+  const avatarFile = AVATAR_FILES[friend.id];
+
+  if (!avatarFile || hasImageError) {
+    return <span className="avatar" aria-hidden="true">{getInitials(friend.name)}</span>;
+  }
+
+  return (
+    <img
+      className="avatar avatar-image"
+      src={avatarFile}
+      alt={`Foto de ${friend.name}`}
+      onError={() => setHasImageError(true)}
+    />
+  );
+}
 
 function App() {
   const [friends, setFriends] = useState<Friend[]>(() => normalizeFriends(initialData));
@@ -200,7 +230,7 @@ function App() {
                     <tr key={friend.id}>
                       <td>
                         <span className="friend-identity">
-                          <span className="avatar" aria-hidden="true">{getInitials(friend.name)}</span>
+                          <Avatar friend={friend} />
                           {friend.name}
                         </span>
                       </td>
@@ -236,7 +266,7 @@ function App() {
                   <div className="friend-card-header">
                     <div>
                       <h3>
-                        <span className="avatar" aria-hidden="true">{getInitials(friend.name)}</span>
+                        <Avatar friend={friend} />
                         {friend.name}
                       </h3>
                       <p>{friendTotal} de {friend.payments.length * QUOTA_AMOUNT} recaudados</p>

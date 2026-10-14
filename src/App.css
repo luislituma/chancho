@@ -319,6 +319,11 @@
   width: 2rem;
 }
 
+.avatar-image {
+  object-fit: cover;
+  overflow: hidden;
+}
+
 .quotas-table th {
   color: var(--text-muted);
   font-size: 0.68rem;
